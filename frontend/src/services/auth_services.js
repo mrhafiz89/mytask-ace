@@ -2,8 +2,6 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { config } from "../config/server";
 
-//const API_URL = "http://localhost:8080/api/auth/";
-
 class AuthService {
   login(username, password) {
     return axios
@@ -12,8 +10,9 @@ class AuthService {
         password
       })
       .then(response => {
-        //console.log(response.data);
-        if (response.data.accessToken) {
+        //console.log(response.data.data.accessToken);
+        if (response.data.data.accessToken) {
+          localStorage.setItem("is_login", true);
           localStorage.setItem("user", JSON.stringify(response.data));
         }
         return response.data;
@@ -21,7 +20,9 @@ class AuthService {
   }
 
   logout() {
+    localStorage.removeItem("is_login");
     localStorage.removeItem("user");
+    localStorage.removeItem("search1");
   }
 
   register(username, email, password, address, name) {
@@ -35,7 +36,8 @@ class AuthService {
   }
 
   getCurrentUser() {
-    return JSON.parse(localStorage.getItem('user'));;
+    //return login();
+    //return JSON.parse(localStorage.getItem('user'));;
   }
 }
 

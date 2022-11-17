@@ -8,7 +8,7 @@ import BarChart from "../chartjs/barchart";
 import LineChart from "../chartjs/linechart";
 import ListTable from "../chartjs/list";
 
-import { useNavigate } from "react-router-dom";
+//import { useNavigate } from "react-router-dom";
 //import "@trendmicro/react-sidenav/dist/react-sidenav.css";
 //import SideNav, { NavItem, NavIcon, NavText } from "@trendmicro/react-sidenav";
 import Container from 'react-bootstrap/Container';
@@ -44,18 +44,25 @@ ChartJS.register(
   LineElement,
 );
 
+const searching = {
+  search1: "", 
+  search2: ""
+}
+
 const Dashboard = () => {
-  const [toggle, setToggle] = useState(true)
-  const state = {
-    isVisible: toggle
+  const [formSearch, setSearch] = useState(searching);
+  const {search1, search2} = formSearch;
+
+  const handleSearch = (e)=> {
+    setSearch({...formSearch, [e.target.name]: e.target.value})
   };
-  const navigates = useNavigate();
-  const handleSelect = (key) =>{
-    //console.log(key)
-      navigates('/'+key);
-      //console.log(`selected ${key}`)
-  }
-  
+
+  const handleSearching = async () => {
+    //console.log(search1+" - "+search2)
+    localStorage.setItem("search1", search1);
+    localStorage.setItem("search2", search2);
+  };
+
   return <>
   <div className="wrapper d-flex align-items-stretch">
     <nav id="sidebar">
@@ -63,7 +70,7 @@ const Dashboard = () => {
         <a
           href="#"
           className="img logo rounded-circle mb-5"
-          style={{ backgroundImage: "url(images/logo.jpg)" }}
+          style={{ backgroundImage: "url(./logo192.png)" }}
         />
         <ul className="list-unstyled components mb-5">
           <li className="active">
@@ -72,8 +79,9 @@ const Dashboard = () => {
               <InputGroup.Text id="search1">@</InputGroup.Text>
               <Form.Control
                 placeholder="Search 1"
-                aria-label="Search 1"
-                aria-describedby="search1"
+                name="search1" 
+                value={search1}
+                onChange={handleSearch}
               />
             </InputGroup>
           </Container>
@@ -84,15 +92,16 @@ const Dashboard = () => {
               <InputGroup.Text id="search2">@</InputGroup.Text>
               <Form.Control
                 placeholder="Search 2"
-                aria-label="Search 2"
-                aria-describedby="search2"
+                name="search2" 
+                value={search2}
+                onChange={handleSearch}
               />
             </InputGroup>
           </Container>
           </li>
           <li>
           <Container>
-            <Button variant="primary">Search Now</Button>{' '}
+            <Button href="/dashboard" variant="primary" onClick={()=> handleSearching()}>Search Now</Button>
           </Container>
           </li>
         </ul>

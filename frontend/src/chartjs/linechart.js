@@ -16,7 +16,7 @@ const LineChart = () => {
     ]
   };
 
-  const options = {
+  /*const options = {
     title: {
       display: true,
       text: "Number of user register"
@@ -32,8 +32,8 @@ const LineChart = () => {
         }
       ]
     }
-  };
-  return <Line data={data} options={options} />;
+  };*/
+  return <Line data={data} />;
 };
 
 export default LineChart;

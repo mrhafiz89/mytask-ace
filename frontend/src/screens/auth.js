@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import {ToastContainer, toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import auth_services from "../services/auth_services";
-import Form from 'react-bootstrap/Form';
 import { useNavigate } from "react-router-dom";
 
 const checkLogin = {
@@ -16,8 +15,7 @@ const registerUser = {
   email: "",
   usernameRegister: "",
   passwordRegister: "",
-  address: "",
-  role: ""
+  address: ""
 }
 
 export default function (props) {
@@ -45,13 +43,13 @@ export default function (props) {
       value: "Klang",
     },
   ];
-  const [selectCity, setSelectCity] = useState("options");
 
+  
   const [formValue, setFormValue] = useState(checkLogin);
   const {username, password} = formValue;
 
   const [formRegister, setFormRegister] = useState(registerUser);
-  const {name, email, address, usernameRegister, passwordRegister, role} = formRegister;
+  const {name, email, address, usernameRegister, passwordRegister} = formRegister;
 
   const navigates = useNavigate();
 
@@ -72,20 +70,15 @@ export default function (props) {
         await toast.success('Thank You '+username,{
            position: toast.POSITION.BOTTOM_RIGHT
         });
-        //const currentUser = auth_services.getCurrentUser();
-        //const data = auth_services.login(username, password);
-        //console.log(response.data.message);
-        
+      
+      //console.log(data);
+      localStorage.setItem("is_login", true);
        setTimeout(() => {
           navigates('/dashboard');
         },2000);
-        
-        //withRouter(props);
-        //
-        //this.props.navigates.navigates('dashboard');
 
       }catch(error){
-        console.log(error.response.data);
+        //console.log(error.response.data);
         toast.error(error.response.data.message,{
           position: toast.POSITION.BOTTOM_RIGHT
         });
@@ -100,30 +93,20 @@ export default function (props) {
 
   const handleRegister = async () => {
     if(usernameRegister && passwordRegister){
-      console.log(usernameRegister, email, passwordRegister, address, name, role);
+      //console.log(usernameRegister, email, passwordRegister, address, name);
       try {
-        await auth_services.register(usernameRegister, email, passwordRegister, address, name, role);
+        await auth_services.register(usernameRegister, email, passwordRegister, address, name);
         //console.log("xxxx");
-        await toast.success('Welcome!!! '+username,{
+        await toast.success('Thank You!!! '+username,{
            position: toast.POSITION.BOTTOM_RIGHT
         });
-
-       
-       
-        //const currentUser = auth_services.getCurrentUser();
-        //const data = auth_services.login(username, password);
-        //console.log(response.data.message);
         
        setTimeout(() => {
           navigates('/');
         },1000);
-        
-        //withRouter(props);
-        //
-        //this.props.navigates.navigates('dashboard');
 
       }catch(error){
-        console.log(error.response.data);
+        //console.log(error.response.data);
         toast.error(error.response.data.message,{
           position: toast.POSITION.BOTTOM_RIGHT
         });
@@ -189,12 +172,12 @@ export default function (props) {
     <div className="Auth-form-container">
       <div className="Auth-form">
         <div className="Auth-form-content">
-          <h3 className="Auth-form-title">Sign In</h3>
+          <h3 href="#" className="Auth-form-title" onClick={changeAuthMode}>Sign In</h3>
           <div className="text-center">
             Already registered?{" "}
-            <span className="link-primary" onClick={changeAuthMode}>
+            <a href="#"><span href="#" className="link-primary" onClick={changeAuthMode}>
               Sign In
-            </span>
+            </span></a>
           </div>
           <div className="form-group mt-3">
             <label>Full Name</label>
@@ -230,14 +213,16 @@ export default function (props) {
             />
           </div>
           <div className="form-group mt-3">
-            <label>Office Address</label>
+            <label>City Address</label>
             <select 
               className="form-control mt-1"
+              name="address"
               value={address} 
               onChange={handleChangeRegister}>
             {options.map((option) => (
-              <option value={option.value}>{option.label}</option>
+              <option key={option.value} value={option.value}>{option.label}</option>
             ))}
+            
           </select>
           </div>
           <div className="form-group mt-3">
@@ -251,24 +236,12 @@ export default function (props) {
               onChange={handleChangeRegister}
             />
           </div>
-          <div className="form-group mt-3">
-            <input
-              type="hidden"
-              className="form-control mt-1"
-              name="role"
-              value="user"
-              onChange={handleChangeRegister}
-            />
-          </div>
           <div className="d-grid gap-2 mt-3">
             <button type="submit" className="btn btn-primary" onClick={()=> handleRegister()}>
               Submit
             </button>
             <ToastContainer />
           </div>
-          <p className="text-center mt-2">
-            Forgot <a href="#">password?</a>
-          </p>
         </div>
       </div>
     </div>

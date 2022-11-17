@@ -1,10 +1,11 @@
 import React from "react";
-import { Navbar, Nav } from "react-bootstrap";
-import Container from 'react-bootstrap/Container';
+import { Nav } from "react-bootstrap";
 import "./style.css";
+import auth_services from "../services/auth_services";
 
-class HeaderBar extends React.Component {
+class HeaderBar extends React.Component { 
   render() {
+    const user = JSON.parse(localStorage.getItem('user'));
     return (
       <>
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -32,11 +33,11 @@ class HeaderBar extends React.Component {
             <ul className="nav navbar-nav ml-auto">
               <li className="nav-item">
                 <a className="nav-link" href="#">
-                  Welcome! Apzapps
+                  Welcome! {user['data']['username']}
                 </a>
               </li>
               <li className="nav-item">
-                <Nav.Link href="/" onClick={this.logOut}>Logout</Nav.Link>
+                <Nav.Link href="/" onClick={auth_services.logout}>Logout</Nav.Link>
               </li>
             </ul>
           </div>
